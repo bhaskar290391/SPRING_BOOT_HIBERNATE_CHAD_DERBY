@@ -30,33 +30,54 @@ public class Application {
 			// findInstructorDetailsById(dao);
 			// deleteInstructorDetailById(dao);
 
-			//createInstructorWithCourses(dao);
-			
-			//findInstructorWithCourses(dao);
-			
-			findInstructorByJoinFetch(dao);
+			// createInstructorWithCourses(dao);
+
+			// findInstructorWithCourses(dao);
+
+			// findInstructorByJoinFetch(dao);
+
+			// updateInstructorById(dao);
+
+			// updateCoursesByid(dao);
+
+			// deleteInstructorByid(dao);
+
+			deleteCoursesById(dao);
 		};
 	}
 
+	private void deleteCoursesById(AppDao dao) {
+
+		dao.deleteCoursesById(10);
+	}
+
+	private void updateCoursesByid(AppDao dao) {
+		Courses updateCourses = dao.updateCourses(10);
+		System.out.println(updateCourses);
+	}
+
+	private void updateInstructorById(AppDao dao) {
+		Instructor updateInstructor = dao.updateInstructor(1);
+		System.out.println(updateInstructor);
+	}
+
 	private void findInstructorByJoinFetch(AppDao dao) {
-		
-		
+
 		Instructor instructorByJoinFetch = dao.findInstructorByJoinFetch(1);
-		System.out.println("instructorByJoinFetch==> "+ instructorByJoinFetch);
-		System.out.println("instructorByJoinFetch==> "+ instructorByJoinFetch.getCourses());
+		System.out.println("instructorByJoinFetch==> " + instructorByJoinFetch);
+		System.out.println("instructorByJoinFetch==> " + instructorByJoinFetch.getCourses());
 	}
 
 	private void findInstructorWithCourses(AppDao dao) {
-		 
-		
+
 		Instructor instructor = dao.findById(1);
-		
+
 		List<Courses> courseByInstructorId = dao.findCourseByInstructorId(instructor.getId());
-		
+
 		instructor.setCourses(courseByInstructorId);
-		
-		System.out.println("The courses is "+ instructor.getCourses());
-		
+
+		System.out.println("The courses is " + instructor.getCourses());
+
 	}
 
 	private void createInstructorWithCourses(AppDao dao) {
@@ -66,9 +87,9 @@ public class Application {
 		InstructorDetails detail = new InstructorDetails("bhaskar2", "cricket");
 
 		inst1.setDetails(detail);
-		
-		Courses tempCourses=new Courses("Java T point");
-		Courses tempCourses2=new Courses("AWS");
+
+		Courses tempCourses = new Courses("Java T point");
+		Courses tempCourses2 = new Courses("AWS");
 
 		inst1.addCourses(tempCourses);
 		inst1.addCourses(tempCourses2);

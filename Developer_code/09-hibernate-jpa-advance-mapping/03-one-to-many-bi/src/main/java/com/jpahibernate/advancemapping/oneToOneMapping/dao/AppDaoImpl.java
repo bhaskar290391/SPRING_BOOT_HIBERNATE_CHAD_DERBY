@@ -33,15 +33,6 @@ public class AppDaoImpl implements AppDao {
 	}
 
 	@Override
-	@Transactional
-	public void deleteByInstructorId(int id) {
-		Instructor instructor = manager.find(Instructor.class, id);
-
-		manager.remove(instructor);
-
-	}
-
-	@Override
 	public InstructorDetails findInstructorDetailById(int id) {
 		return manager.find(InstructorDetails.class, id);
 	}
@@ -66,12 +57,55 @@ public class AppDaoImpl implements AppDao {
 	@Override
 	public Instructor findInstructorByJoinFetch(int id) {
 		// TODO Auto-generated method stub
-		TypedQuery<Instructor> query = manager.createQuery("select i from Instructor i "
-				+ " join fetch i.courses "
-				+ " join fetch i.details where i.id=:data", Instructor.class);
-		
+		TypedQuery<Instructor> query = manager.createQuery(
+				"select i from Instructor i " + " join fetch i.courses " + " join fetch i.details where i.id=:data",
+				Instructor.class);
+
 		query.setParameter("data", id);
 		return query.getSingleResult();
+	}
+
+	@Override
+	@Transactional
+	public void deleteByInstructorId(int id) {
+		Instructor instructor = manager.find(Instructor.class, id);
+
+		List<Courses> coursesList = instructor.getCourses();
+
+		for (Courses courses : coursesList) {
+			courses.setInstructor(null);
+		}
+		manager.remove(instructor);
+
+	}
+
+	@Override
+	@Transactional
+	public Instructor updateInstructor(int id) {
+
+		Instructor instructor = manager.find(Instructor.class, id);
+
+		instructor.setLastName("Maddy");
+
+		return manager.merge(instructor);
+
+	}
+
+	@Override
+	@Transactional
+	public Courses updateCourses(int id) {
+		
+		Courses courses = manager.find(Courses.class, id);
+		courses.setTitle("Enjoy the new things");
+		return manager.merge(courses);
+	}
+
+	@Override
+	@Transactional
+	public void deleteCoursesById(int id) {
+		Courses courses = manager.find(Courses.class, id);
+		manager.remove(courses);
+
 	}
 
 }
